@@ -9,7 +9,7 @@ const Global = (props) => {
     const isCountdownDisplayed = useSelector((state) => {
         console.log('state', state)
         return state.countdownShower.value
-    } )
+    })
 
     const countdown = () => {
         if(isCountdownDisplayed) {
