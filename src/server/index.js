@@ -17,51 +17,33 @@ app.get("*", (req, res, next) => {
     const statsFile = path.resolve('./assets/loadable-stats.json')
     const extractor = new ChunkExtractor({ statsFile });
 
-    const fetchUrl = url => fetch(url).then(response => response.json())
-                                      .then(data => emptyArray.concat(data.drinks))
-                                      .then(array => {
-                                        const jsx = extractor.collectChunks(<App arrayFromFetch={array} />)
-                                        const html = renderToString(jsx)
-                                        const scriptTags = extractor.getScriptTags()
-                                        
-                                          res.send(`
-                                            <!DOCTYPE html>
-                                            <html>
-                                              <head>
-                                                <title>SSR with React</title>
-                                                <script>window.__INITIAL_ARRAYFETCH__ = ${serialize(array)}</script>
-                                              </head>
-                                              <body>
-                                                <div id="app">${html}</div>
-                                                ${scriptTags}
-                                              </body>
-                                            </html>
-                                          `)
-                                          }
-                                        )
-                                    .catch((error) => {
-                                      console.warn(error)
-                                      return null
-                                    });
+    try {
+      fetch(url)
+      .then(response => response.json())
+      .then(data => emptyArray.concat(data.drinks))
+    } catch {
+      console.log(error)
+    }
 
-  fetchUrl(url)
+    console.log('drinkData', drinkData)
 
-  /* const jsx = extractor.collectChunks(<App />)
-  const html = renderToString(jsx)
-  const scriptTags = extractor.getScriptTags() */
+    const jsx = extractor.collectChunks(<App arrayFromFetch={drinkData} />)
+    const html = renderToString(jsx)
+    const scriptTags = extractor.getScriptTags()
 
-  /* res.send(`
-            <!DOCTYPE html>
-            <html>
-              <head>
-                <title>SSR with React</title>
-              </head>
-              <body>
-                <div id="app">${html}</div>
-                ${scriptTags}
-              </body>
-            </html>
-          `) */
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>SSR with React</title>
+            <script>window.__INITIAL_ARRAYFETCH__ = ${serialize(drinkData)}</script>
+          </head>
+          <body>
+            <div id="app">${html}</div>
+            ${scriptTags}
+          </body>
+        </html>
+      `) 
 })
 
 app.listen(3000, () => {
