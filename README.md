@@ -4,3 +4,5 @@
 Same project of https://github.com/SaraPeir/project-2021 but in Server Side Rendering.
 
 Code splitting was done with Loadable Components for SSR: https://loadable-components.com/docs/server-side-rendering/
+
+Added Redux to manage global state

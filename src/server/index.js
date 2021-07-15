@@ -16,6 +16,7 @@ app.get("*", (req, res, next) => {
     const url = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Gin';
     const statsFile = path.resolve('./assets/loadable-stats.json')
     const extractor = new ChunkExtractor({ statsFile });
+    let drinkData = [];
 
     try {
       fetch(url)
